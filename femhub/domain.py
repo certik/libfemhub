@@ -1,4 +1,5 @@
 import sys
+from math import sqrt
 
 class Domain:
     """
@@ -609,3 +610,109 @@ class Mesh:
             if id(locs[var]) == id(self):
                 self_name = var
         print self.get_html(self_name=self_name, editor=editor)
+
+    # Function to check whether elements are positively oriented
+    def check_mesh(mesh):
+        ok = True
+        for elem in mesh.elems:
+            a,b,c = elem
+            ax = mesh.nodes[a][0]
+            ay = mesh.nodes[a][1]
+            bx = mesh.nodes[b][0]
+            by = mesh.nodes[b][1]
+            cx = mesh.nodes[c][0]
+            cy = mesh.nodes[c][1]
+            abx = bx - ax
+            aby = by - ay
+            acx = cx - ax
+            acy = cy - ay
+            z = abx*acy - aby*acx
+            if z == 0:
+                print "Degenerate element detected."
+                ok = False
+            if z < 0: ok = False
+        return ok
+
+    # If node is found, returning its index.
+    # If not, adding to the list of nodes and returning its index.
+    def look_up_node(mesh, x, y, min_edge_length):
+        counter = 0
+        for node in mesh.nodes:
+            x0, y0 = node
+            dx = float(x0 - x)
+            dy = float(y0 - y)
+            if sqrt(dx**2 + dy**2) < 0.01*min_edge_length:
+                found = 1
+                return counter
+            counter += 1
+        mesh.nodes.append((x,y))
+        return counter
+
+    # Refine a triangular element
+    def refine_element(mesh, elem, min_edge_length):
+        assert len(elem) == 3
+        a, b, c = elem
+        ax = mesh.nodes[a][0]
+        ay = mesh.nodes[a][1]
+        bx = mesh.nodes[b][0]
+        by = mesh.nodes[b][1]
+        cx = mesh.nodes[c][0]
+        cy = mesh.nodes[c][1]
+        mesh.elems.remove(elem)
+        d = look_up_node(mesh, (ax + bx)/2., (ay + by)/2., min_edge_length)
+        e = look_up_node(mesh, (bx + cx)/2., (by + cy)/2., min_edge_length)
+        f = look_up_node(mesh, (cx + ax)/2., (cy + ay)/2., min_edge_length)
+        mesh.elems.append((a, d, f))
+        mesh.elems.append((d, b, e))
+        mesh.elems.append((f, d, e))
+        mesh.elems.append((f, e, c))
+        # updating the list of bdy edges if necessary
+        bdy_temp = list(mesh.bdy)
+        for edge in bdy_temp:
+            a0,b0,marker = edge
+            if (a == a0 and b == b0) or (b == a0 and a == b0):
+                mesh.bdy.remove(edge)
+                mesh.bdy.append([a,d,marker])
+                mesh.bdy.append([d,b,marker])
+            if (b == a0 and c == b0) or (c == a0 and b == b0):
+                mesh.bdy.remove(edge)
+                mesh.bdy.append([b,e,marker])
+                mesh.bdy.append([e,c,marker])
+            if (c == a0 and a == b0) or (a == a0 and c == b0):
+                mesh.bdy.remove(edge)
+                mesh.bdy.append([c,f,marker])
+                mesh.bdy.append([f,a,marker])
+
+    # Call refine_element() for each element in the mesh
+    def refine_all_elements(mesh):
+        elems_tmp = list(mesh.elems)
+        min_edge_length = calc_min_edge_length(mesh)
+        for elem in elems_tmp:
+            refine_element(mesh, elem, min_edge_length)
+
+    # Calculate min elem edge length
+    def calc_min_edge_length(mesh):
+        min_edge_length = 10e10
+        for elem in mesh.elems:
+            a, b, c = elem
+            ax = mesh.nodes[a][0]
+            ay = mesh.nodes[a][1]
+            bx = mesh.nodes[b][0]
+            by = mesh.nodes[b][1]
+            cx = mesh.nodes[c][0]
+            cy = mesh.nodes[c][1]
+            ab_length = sqrt((bx - ax)**2 + (by - ay)**2)
+            bc_length = sqrt((cx - bx)**2 + (cy - by)**2)
+            ca_length = sqrt((cx - ax)**2 + (cy - ay)**2)
+            if ab_length < min_edge_length: min_edge_length = ab_length
+            if bc_length < min_edge_length: min_edge_length = bc_length
+            if ca_length < min_edge_length: min_edge_length = ca_length
+        return min_edge_length
+
+    # Decide whether a node lies on the boundary
+    def is_boundary_node(mesh, i):
+        for edge in mesh.bdy:
+            a,b,marker = edge
+            if i == a or i == b:
+                return True
+        return False
