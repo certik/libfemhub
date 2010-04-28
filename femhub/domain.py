@@ -612,32 +612,29 @@ class Mesh:
         print self.get_html(self_name=self_name, editor=editor)
 
     # Function to check whether elements are positively oriented
-    def check_mesh(mesh):
+    def check_mesh(self):
         ok = True
-        for elem in mesh.elems:
+        for elem in self.elems:
             a,b,c = elem
-            ax = mesh.nodes[a][0]
-            ay = mesh.nodes[a][1]
-            bx = mesh.nodes[b][0]
-            by = mesh.nodes[b][1]
-            cx = mesh.nodes[c][0]
-            cy = mesh.nodes[c][1]
+            ax = self.nodes[a][0]
+            ay = self.nodes[a][1]
+            bx = self.nodes[b][0]
+            by = self.nodes[b][1]
+            cx = self.nodes[c][0]
+            cy = self.nodes[c][1]
             abx = bx - ax
             aby = by - ay
             acx = cx - ax
             acy = cy - ay
             z = abx*acy - aby*acx
-            if z == 0:
-                print "Degenerate element detected."
-                ok = False
-            if z < 0: ok = False
+            if z <= 0: ok = False
         return ok
 
     # If node is found, returning its index.
     # If not, adding to the list of nodes and returning its index.
-    def look_up_node(mesh, x, y, min_edge_length):
+    def look_up_node(self, x, y, min_edge_length):
         counter = 0
-        for node in mesh.nodes:
+        for node in self.nodes:
             x0, y0 = node
             dx = float(x0 - x)
             dy = float(y0 - y)
@@ -645,62 +642,62 @@ class Mesh:
                 found = 1
                 return counter
             counter += 1
-        mesh.nodes.append((x,y))
+        self.nodes.append((x,y))
         return counter
 
     # Refine a triangular element
-    def refine_element(mesh, elem, min_edge_length):
+    def refine_element(self, elem, min_edge_length):
         assert len(elem) == 3
         a, b, c = elem
-        ax = mesh.nodes[a][0]
-        ay = mesh.nodes[a][1]
-        bx = mesh.nodes[b][0]
-        by = mesh.nodes[b][1]
-        cx = mesh.nodes[c][0]
-        cy = mesh.nodes[c][1]
-        mesh.elems.remove(elem)
-        d = look_up_node(mesh, (ax + bx)/2., (ay + by)/2., min_edge_length)
-        e = look_up_node(mesh, (bx + cx)/2., (by + cy)/2., min_edge_length)
-        f = look_up_node(mesh, (cx + ax)/2., (cy + ay)/2., min_edge_length)
-        mesh.elems.append((a, d, f))
-        mesh.elems.append((d, b, e))
-        mesh.elems.append((f, d, e))
-        mesh.elems.append((f, e, c))
+        ax = self.nodes[a][0]
+        ay = self.nodes[a][1]
+        bx = self.nodes[b][0]
+        by = self.nodes[b][1]
+        cx = self.nodes[c][0]
+        cy = self.nodes[c][1]
+        self.elems.remove(elem)
+        d = self.look_up_node((ax + bx)/2., (ay + by)/2., min_edge_length)
+        e = self.look_up_node((bx + cx)/2., (by + cy)/2., min_edge_length)
+        f = self.look_up_node((cx + ax)/2., (cy + ay)/2., min_edge_length)
+        self.elems.append((a, d, f))
+        self.elems.append((d, b, e))
+        self.elems.append((f, d, e))
+        self.elems.append((f, e, c))
         # updating the list of bdy edges if necessary
-        bdy_temp = list(mesh.bdy)
+        bdy_temp = self.bdy[:]
         for edge in bdy_temp:
             a0,b0,marker = edge
             if (a == a0 and b == b0) or (b == a0 and a == b0):
-                mesh.bdy.remove(edge)
-                mesh.bdy.append([a,d,marker])
-                mesh.bdy.append([d,b,marker])
+                self.bdy.remove(edge)
+                self.bdy.append([a,d,marker])
+                self.bdy.append([d,b,marker])
             if (b == a0 and c == b0) or (c == a0 and b == b0):
-                mesh.bdy.remove(edge)
-                mesh.bdy.append([b,e,marker])
-                mesh.bdy.append([e,c,marker])
+                self.bdy.remove(edge)
+                self.bdy.append([b,e,marker])
+                self.bdy.append([e,c,marker])
             if (c == a0 and a == b0) or (a == a0 and c == b0):
-                mesh.bdy.remove(edge)
-                mesh.bdy.append([c,f,marker])
-                mesh.bdy.append([f,a,marker])
+                self.bdy.remove(edge)
+                self.bdy.append([c,f,marker])
+                self.bdy.append([f,a,marker])
 
     # Call refine_element() for each element in the mesh
-    def refine_all_elements(mesh):
-        elems_tmp = list(mesh.elems)
-        min_edge_length = calc_min_edge_length(mesh)
+    def refine_all_elements(self):
+        elems_tmp = self.elems[:]
+        min_edge_length = self.calc_min_edge_length()
         for elem in elems_tmp:
-            refine_element(mesh, elem, min_edge_length)
+            self.refine_element(elem, min_edge_length)
 
     # Calculate min elem edge length
-    def calc_min_edge_length(mesh):
+    def calc_min_edge_length(self):
         min_edge_length = 10e10
-        for elem in mesh.elems:
+        for elem in self.elems:
             a, b, c = elem
-            ax = mesh.nodes[a][0]
-            ay = mesh.nodes[a][1]
-            bx = mesh.nodes[b][0]
-            by = mesh.nodes[b][1]
-            cx = mesh.nodes[c][0]
-            cy = mesh.nodes[c][1]
+            ax = self.nodes[a][0]
+            ay = self.nodes[a][1]
+            bx = self.nodes[b][0]
+            by = self.nodes[b][1]
+            cx = self.nodes[c][0]
+            cy = self.nodes[c][1]
             ab_length = sqrt((bx - ax)**2 + (by - ay)**2)
             bc_length = sqrt((cx - bx)**2 + (cy - by)**2)
             ca_length = sqrt((cx - ax)**2 + (cy - ay)**2)
