@@ -710,8 +710,8 @@ class Mesh:
         return min_edge_length
 
     # Decide whether a node lies on the boundary
-    def is_boundary_node(mesh, i):
-        for edge in mesh.bdy:
+    def is_boundary_node(self, i):
+        for edge in self.bdy:
             a,b,marker = edge
             if i == a or i == b:
                 return True
