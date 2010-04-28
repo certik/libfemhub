@@ -611,8 +611,25 @@ class Mesh:
                 self_name = var
         print self.get_html(self_name=self_name, editor=editor)
 
-    # Function to check whether elements are positively oriented
-    def check_mesh(self):
+    def check_element_orientations(self):
+        """
+        Checks whether all elements are positively oriented.
+
+        Example:
+        >>> from femhub import Mesh
+        >>> nodes = [[-1., -1.], [1., -1.], [-1., 1.]]
+        >>> elems = [(0, 1, 2)]
+        >>> bdy = [[0, 1, 1], [1, 2, 2], [2, 0, 3]]
+        >>> mesh = Mesh(nodes, elems, bdy)
+        >>> mesh.check_element_orientations()
+        True
+        >>> elems2 = [(0, 2, 1)]
+        >>> mesh2 = Mesh(nodes, elems2, bdy)
+        >>> mesh2.check_element_orientations()
+        False
+
+        """
+
         ok = True
         for elem in self.elems:
             a,b,c = elem
@@ -630,9 +647,29 @@ class Mesh:
             if z <= 0: ok = False
         return ok
 
-    # If node is found, returning its index.
-    # If not, adding to the list of nodes and returning its index.
     def look_up_node(self, x, y, min_edge_length):
+        """
+        Search the list of nodes for node with coordinates [x, y]. 
+
+        Here, min_edge_length/100. is used as tolerance. If the node is 
+        found, return its index. If not, append it to the end of the 
+        list and return its index. 
+
+        Example:
+        >>> from femhub import Mesh
+        >>> nodes = [[-1., -1.], [1., -1.], [-1., 1.]]
+        >>> elems = [(0, 1, 2)]
+        >>> bdy = [[0, 1, 1], [1, 2, 2], [2, 0, 3]]
+        >>> mesh = Mesh(nodes, elems, bdy)
+        >>> min_edge_length = mesh.calc_min_edge_length()
+        >>> mesh.look_up_node(1.0, -1.0, min_edge_length)
+        1
+        >>> mesh.look_up_node(1.0, 1.0, min_edge_length)
+        3
+        >>> print mesh.nodes
+        [[-1.0, -1.0], [1.0, -1.0], [-1.0, 1.0], [1.0, 1.0]]
+
+        """
         counter = 0
         for node in self.nodes:
             x0, y0 = node
@@ -642,11 +679,47 @@ class Mesh:
                 found = 1
                 return counter
             counter += 1
-        self.nodes.append((x,y))
+        self.nodes.append([x, y])
         return counter
 
-    # Refine a triangular element
     def refine_element(self, elem, min_edge_length):
+        """
+        Refine a triangular element
+
+        Here 'elem' is a triple of indices [a,b,c], and 
+        min_edge_length is the length of the shortest edge 
+        in the mesh.
+
+        Example:
+        >>> from femhub import Mesh
+        >>> nodes = [[-1., -1.], [1., -1.], [-1., 1.]]
+        >>> elems = [(0, 1, 2)]
+        >>> bdy = [[0, 1, 1], [1, 2, 2], [2, 0, 3]]
+        >>> mesh = Mesh(nodes, elems, bdy)
+        >>> print mesh
+        Mesh:
+            nodes:
+                [[-1.0, -1.0], [1.0, -1.0], [-1.0, 1.0]]
+            elements:
+                [(0, 1, 2)]
+            boundaries:
+                [[0, 1, 1], [1, 2, 2], [2, 0, 3]]
+            curves:
+                []
+        >>> min_edge_length = mesh.calc_min_edge_length()
+        >>> mesh.refine_element((0, 1, 2), min_edge_length)
+        >>> print mesh
+        Mesh:
+        nodes:
+            [[-1.0, -1.0], [1.0, -1.0], [-1.0, 1.0], (0.0, -1.0), (0.0, 0.0), (-1.0, 0.0)]
+        elements:
+            [(0, 3, 5), (3, 1, 4), (5, 3, 4), (5, 4, 2)]
+        boundaries:
+            [[0, 3, 1], [3, 1, 1], [1, 4, 2], [4, 2, 2], [2, 5, 3], [5, 0, 3]]
+        curves:
+            []
+
+        """
         assert len(elem) == 3
         a, b, c = elem
         ax = self.nodes[a][0]
@@ -680,15 +753,49 @@ class Mesh:
                 self.bdy.append([c,f,marker])
                 self.bdy.append([f,a,marker])
 
-    # Call refine_element() for each element in the mesh
     def refine_all_elements(self):
+        """
+        Call refine_element() for each element in the mesh.
+
+        Examples:
+
+        >>> m = Mesh([[0.0,1.0],[1.0,1.0],[1.0,0.0],[0.0,0.0],],[[1,0,2],[2,0,3],],[[2,0,1],[2,0,1],[2,0,1],[2,0,1],],[])
+        >>> m.elems
+        [[1, 0, 2], [2, 0, 3]]
+        >>> m.refine_all_elements()
+        >>> m.elems
+        [(1, 9, 11), (9, 4, 10), (11, 9, 10), (11, 10, 6), (4, 12, 14), (12, 0,
+13), (14, 12, 13), (14, 13, 5), (6, 10, 15), (10, 4, 14), (15, 10, 14),
+(15, 14, 5), (6, 15, 17), (15, 5, 16), (17, 15, 16), (17, 16, 2), (2,
+16, 19), (16, 5, 18), (19, 16, 18), (19, 18, 8), (5, 13, 21), (13, 0,
+20), (21, 13, 20), (21, 20, 7), (8, 18, 22), (18, 5, 21), (22, 18, 21),
+(22, 21, 7), (8, 22, 24), (22, 7, 23), (24, 22, 23), (24, 23, 3)]
+
+        """
         elems_tmp = self.elems[:]
         min_edge_length = self.calc_min_edge_length()
         for elem in elems_tmp:
             self.refine_element(elem, min_edge_length)
 
-    # Calculate min elem edge length
     def calc_min_edge_length(self):
+        """
+        Calculate min elem edge length.
+
+        This parameter divided by 100.0 is used as tolerance 
+        to decide whether two nodes are the same or not.  
+
+        >>> from femhub import Mesh
+        >>> nodes = [[-1., -1.], [1., -1.], [-1., 1.]]
+        >>> elems = [(0, 1, 2)]
+        >>> bdy = [[0, 1, 1], [1, 2, 2], [2, 0, 3]]
+        >>> mesh = Mesh(nodes, elems, bdy)
+        >>> print mesh.calc_min_edge_length()
+        2.0
+        >>> mesh.refine_all_elements()
+        >>> print mesh.calc_min_edge_length()
+        1.0
+
+        """
         min_edge_length = 10e10
         for elem in self.elems:
             a, b, c = elem
@@ -706,8 +813,24 @@ class Mesh:
             if ca_length < min_edge_length: min_edge_length = ca_length
         return min_edge_length
 
-    # Decide whether a node lies on the boundary
     def is_boundary_node(self, i):
+        """
+        Decide whether a node lies on the boundary
+
+        Here 'i' is the node's index.
+
+        Example:
+        >>> from femhub import Mesh
+        >>> nodes = [[-1., -1.], [1., -1.], [-1., 1.]]
+        >>> elems = [(0, 1, 2)]
+        >>> bdy = [[0, 1, 1], [1, 2, 2], [2, 0, 3]]
+        >>> mesh = Mesh(nodes, elems, bdy)
+        >>> mesh.is_boundary_node(2)
+        True
+        >>> mesh.is_boundary_node(3)
+        False
+
+        """
         for edge in self.bdy:
             a,b,marker = edge
             if i == a or i == b:
