@@ -282,6 +282,22 @@ def orient_loops(nodes, loops):
 
 
 def ccw(A, B, C):
+    """
+    Checks whether a triangle is positively (counter clock wise) oriented.  
+
+    Here (A[0], A[1]), (B[0], B[1]), (C[0], C[1]) are vertex coordinates.
+
+    >>> A = [0., 0.]
+    >>> B = [1., 0.]
+    >>> C = [0., 1.]
+    >>> ccw(A, B, C)
+    True
+    >>> A = [0., 0.]
+    >>> B = [0., 1.]
+    >>> C = [1., 0.]
+    >>> ccw(A, B, C)
+    False
+    """
     return (C[1]-A[1])*(B[0]-A[0]) > (B[1]-A[1])*(C[0]-A[0])
 
 def intersect(A, B, C, D):
