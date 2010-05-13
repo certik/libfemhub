@@ -287,6 +287,8 @@ def ccw(A, B, C):
 
     Here (A[0], A[1]), (B[0], B[1]), (C[0], C[1]) are vertex coordinates.
 
+    Example:
+
     >>> A = [0., 0.]
     >>> B = [1., 0.]
     >>> C = [0., 1.]
