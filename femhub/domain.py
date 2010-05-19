@@ -4,7 +4,7 @@ from math import sqrt
 class Domain:
     """
     Represents an FE domain.
-    Hello, i am testing to see if this works
+    
     Currently the domain is 2D and is defined by a set of nodes and (boundary)
     edges. It can be made more general in the future.
 
@@ -27,7 +27,7 @@ class Domain:
     def geometry(cls, nodes, edges):
         """
         Constructs the Domain() class from the output of the graph_editor.
-
+        Hello there, do not fret, this is a test
         The graph_editor returns nodes and edges in a specific format (as
         dictionaries), so we need to convert them into the Domain() format.
 
