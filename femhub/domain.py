@@ -27,7 +27,7 @@ class Domain:
     def geometry(cls, nodes, edges):
         """
         Constructs the Domain() class from the output of the graph_editor.
-        Hello there, do not fret, this is a test
+         
         The graph_editor returns nodes and edges in a specific format (as
         dictionaries), so we need to convert them into the Domain() format.
 
@@ -71,7 +71,7 @@ class Domain:
     @property
     def nodes(self):
         """
-        Return the nodes.
+        Returns the nodes.
 
         Example:
 
@@ -87,7 +87,7 @@ class Domain:
     @property
     def edges(self):
         """
-        Return the edges.
+        Returns the edges.
 
         Example:
 
@@ -234,7 +234,7 @@ onclick="cell_delete_output(%(cell_id)s);">Close</button></td></tr></tbody></tab
     @property
     def boundary_closed(self):
         """
-        Returns True if the boundary is closed.
+        Returns True if the boundary is closed. Otherwise Returns False.
 
         Example:
 
@@ -272,7 +272,7 @@ onclick="cell_delete_output(%(cell_id)s);">Close</button></td></tr></tbody></tab
 
     def triangulate(self, debug=False):
         """
-        Triangulate the domain.
+        Triangulates the domain.
 
         Returns an instance of the Mesh() class that contains the triangular
         mesh.
@@ -308,11 +308,11 @@ class Mesh:
     Represents a FE mesh.
 
     Currently the mesh is 2D and is defined by a set of nodes and elements.
-    Element is either a set of 3 nodes (triangle) or 4 nodes (quad).
+    Elements could be either a set of 3 nodes (triangle) or 4 nodes (quad).
     It can be made more general in the future.
 
-    It contains methods to export this mesh in the hermes2d (and other)
-    formats.
+    This "class" contains methods to export this mesh in the hermes2d (and other)
+    formats. For more information refer to the export_mesh() function.
 
     Example:
 
@@ -425,7 +425,7 @@ class Mesh:
         """
         Returns the mesh boundaries.
 
-        This is a shortcut for bdy.
+        This is a shortcut for self.boundaries. 
 
         Example:
 
@@ -754,9 +754,9 @@ class Mesh:
 
     def refine_all_elements(self):
         """
-        Call refine_element() for each element in the mesh.
+        Call refine_all_elements() to refine certain elements in the mesh.
 
-        Examples:
+        Example:
 
         >>> m = Mesh([[0.0,1.0],[1.0,1.0],[1.0,0.0],[0.0,0.0],],[[1,0,2],[2,0,3],],[[3,2,1],[2,1,2],[1,0,3],[0,3,4],],[])
         >>> m.elems
@@ -778,7 +778,7 @@ class Mesh:
 
     def calc_min_edge_length(self):
         """
-        Calculate min elem edge length.
+        Calculates min elem edge length.
 
         This parameter divided by 100.0 is used as tolerance 
         to decide whether two nodes are the same or not.  
@@ -814,7 +814,8 @@ class Mesh:
 
     def is_boundary_node(self, i):
         """
-        Decide whether a node lies on the boundary
+        Decides whether a node lies on the boundary, if it does it
+        will return True, otherwise it will return False.
 
         Here 'i' is the node's index.
 
