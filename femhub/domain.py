@@ -615,6 +615,7 @@ class Mesh:
         Checks whether all elements are positively oriented.
 
         Example:
+
         >>> from femhub import Mesh
         >>> nodes = [[-1., -1.], [1., -1.], [-1., 1.]]
         >>> elems = [(0, 1, 2)]
@@ -655,6 +656,7 @@ class Mesh:
         list and return its index. 
 
         Example:
+
         >>> from femhub import Mesh
         >>> nodes = [[-1., -1.], [1., -1.], [-1., 1.]]
         >>> elems = [(0, 1, 2)]
@@ -690,6 +692,7 @@ class Mesh:
         in the mesh.
 
         Example:
+
         >>> from femhub import Mesh
         >>> nodes = [[-1., -1.], [1., -1.], [-1., 1.]]
         >>> elems = [(0, 1, 2)]
@@ -783,6 +786,8 @@ class Mesh:
         This parameter divided by 100.0 is used as tolerance 
         to decide whether two nodes are the same or not.  
 
+        Example:
+
         >>> from femhub import Mesh
         >>> nodes = [[-1., -1.], [1., -1.], [-1., 1.]]
         >>> elems = [(0, 1, 2)]
@@ -820,6 +825,7 @@ class Mesh:
         Here 'i' is the node's index.
 
         Example:
+
         >>> from femhub import Mesh
         >>> nodes = [[-1., -1.], [1., -1.], [-1., 1.]]
         >>> elems = [(0, 1, 2)]
