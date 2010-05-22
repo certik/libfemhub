@@ -9,11 +9,11 @@ class TriangulationError(Exception):
 def is_on_the_left(c, a, b, pts_list):
    """
 
-   This function checks to see whether a given point "c" lies to the
-   left of the edge (a,b).  The order in which the parameters are inputed
-   DOES matter.  We will demonstrate this function with an example.
+   Checks to see whether a given point "c" lies to the left of the edge (a,b).
+ 
+   The order in which the parameters are inputted DOES matter.
    
-   Example: Copy and paste the corresponding lines in their respective cells.
+   Example:
 
    >>> is_on_the_left(0,1,2,[[-1,1],[0,0],[0,1]]) 
    True
