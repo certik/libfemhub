@@ -4,25 +4,22 @@ from pylab import plot, savefig, grid, legend, clf, pcolor, spy, axis
 class TriangulationError(Exception):
     pass
 
-# Check whether a given point c lies on the left of
-# the edge (a,b)
 def is_on_the_left(c, a, b, pts_list):
    """
-
    Checks to see whether a given point "c" lies to the left of the edge (a,b).
- 
+
    The order in which the parameters are inputted DOES matter.
-   
+
    Example:
 
-   >>> is_on_the_left(0,1,2,[[-1,1],[0,0],[0,1]]) 
+   >>> is_on_the_left(0,1,2,[[-1,1],[0,0],[0,1]])
    True
    >>> is_on_the_left(0,2,1,[[-1,1],[0,0],[0,1]])
    False
 
    The parameters "(0,1,2," refers to the order in the list "[[-1,1],[],..."
    For example point "2" being "[0,1]".
-   The parameter or point of interest "c" needs to come first, followed 
+   The parameter or point of interest "c" needs to come first, followed
    by points "a"and "b" in that order, and finally the list of points.
 
 
