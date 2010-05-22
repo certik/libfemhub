@@ -7,6 +7,26 @@ class TriangulationError(Exception):
 # Check whether a given point c lies on the left of
 # the edge (a,b)
 def is_on_the_left(c, a, b, pts_list):
+   """
+
+   This function checks to see whether a given point "c" lies to the
+   left of the edge (a,b).  The order in which the parameters are inputed
+   DOES matter.  We will demonstrate this function with an example.
+   
+   Example: Copy and paste the corresponding lines in their respective cells.
+
+   >>> is_on_the_left(0,1,2,[[-1,1],[0,0],[0,1]]) 
+   True
+   >>> is_on_the_left(0,2,1,[[-1,1],[0,0],[0,1]])
+   False
+
+   The parameters "(0,1,2," refers to the order in the list "[[-1,1],[],..."
+   For example point "2" being "[0,1]".
+   The parameter or point of interest "c" needs to come first, followed 
+   by points "a"and "b" in that order, and finally the list of points.
+
+
+   """
    ax, ay = pts_list[a]
    bx, by = pts_list[b]
    cx, cy = pts_list[c]
