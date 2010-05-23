@@ -38,6 +38,23 @@ def is_on_the_left(c, a, b, pts_list):
 
 # Angle criterion (to be minimized)
 def criterion(a, b, c, pts_list):
+   """
+   Returns the cosine of the angle acb.
+
+   Example:
+
+   >>> criterion(0,1,2,[[0,0],[0,1],[-1,1]])
+   0.707106
+   >>> criterion(0,1,2,[[0,0],[0,2],[-1,1]])
+   0.0 
+
+   The order in which the parameters are inputted DOES matter.
+   The parameters "(0,1,2," refers to the order in the list "[[0,0],[],..."
+   For example point "2" being "[-1,1]".
+   The parameters need to follow the order "(a,b,c" followed by the
+   list of points.
+   
+   """
    ax, ay = pts_list[a]
    bx, by = pts_list[b]
    cx, cy = pts_list[c]
