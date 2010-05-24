@@ -92,9 +92,26 @@ def find_third_point(a, b, pts_list, edges):
         raise TriangulationError("ERROR: Optimal point not found in find_third_point().")
     return pt_index
 
-# If the point 'c' belong to a boundary edge, return False,
+# If the point 'c' belongs to a boundary edge, return False,
 # otherwise return True
 def lies_inside(c, bdy_edges):
+   """
+   Checks to see whether a given point "c" lies on a boundary edge.
+
+   If the given point "c" lies on a boundary edge the function will 
+   return False, otherwise the function will return True.
+
+   Example:
+
+   >>> lies_inside([0,0.5],[[[0,0],[0,1]],[0,1]]) 
+   True
+   >>> lies_inside([0,0],[[[0,0],[0,1]],[0,1]]) 
+   False
+
+   The point of interest "c" comes first followed by the list of points and the 
+   boundary edge.
+
+   """
    for edge in bdy_edges:
        a,b = edge
        if c == a or c == b: return False
