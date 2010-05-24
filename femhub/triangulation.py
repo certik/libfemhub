@@ -119,7 +119,15 @@ def lies_inside(c, bdy_edges):
 
 def is_boundary_edge(a, b, bdy_edges):
     """
-    Checks whether edge (a, b) is in the list of boundary edges
+    Checks whether edge (a, b) is in the list of boundary edges.
+
+    Example:
+
+    >>> is_boundary_edge([0,0],[0,1],[[[0,0],[0,1]],[0,1]]) 
+    True
+    >>> is_boundary_edge([-1,0],[-1,1],[[[0,0],[0,1]],[0,1]])
+    False 
+
     """
     for edge in bdy_edges:
         a0, b0 = edge
