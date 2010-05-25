@@ -92,9 +92,26 @@ def find_third_point(a, b, pts_list, edges):
         raise TriangulationError("ERROR: Optimal point not found in find_third_point().")
     return pt_index
 
-# If the point 'c' belong to a boundary edge, return False,
+# If the point 'c' belongs to a boundary edge, return False,
 # otherwise return True
 def lies_inside(c, bdy_edges):
+   """
+   Checks to see whether a given point "c" lies on a boundary edge.
+
+   If the given point "c" lies on a boundary edge the function will 
+   return False, otherwise the function will return True.
+
+   Example:
+
+   >>> lies_inside([0,0.5],[[[0,0],[0,1]],[0,1]]) 
+   True
+   >>> lies_inside([0,0],[[[0,0],[0,1]],[0,1]]) 
+   False
+
+   The point of interest "c" comes first followed by the list of points and the 
+   boundary edge.
+
+   """
    for edge in bdy_edges:
        a,b = edge
        if c == a or c == b: return False
@@ -102,7 +119,15 @@ def lies_inside(c, bdy_edges):
 
 def is_boundary_edge(a, b, bdy_edges):
     """
-    Checks whether edge (a, b) is in the list of boundary edges
+    Checks whether edge (a, b) is in the list of boundary edges.
+
+    Example:
+
+    >>> is_boundary_edge([0,0],[0,1],[[[0,0],[0,1]],[0,1]]) 
+    True
+    >>> is_boundary_edge([-1,0],[-1,1],[[[0,0],[0,1]],[0,1]])
+    False 
+
     """
     for edge in bdy_edges:
         a0, b0 = edge
@@ -232,10 +257,21 @@ def edges_is_closed_curve(edges):
 
 def check_regularity(edges):
     """
-    Checks, whether the boundary is closed and whether exactly 2 edges are
+    Checks whether the boundary is closed and whether exactly 2 edges are
     sharing a node.
 
     Otherwise it raises the proper exception.
+
+    Example:
+
+    >>> check_regularity([[0,1],[1,2],[2,3],[3,0]])
+
+    >>> check_regularity([[0,1],[2,3],[3,0]]) 
+    Exception: Boundary is not closed.
+
+    The parameters in the list are edges, for example, "[0,1]" is an
+    edge.
+
     """
     for a, b in edges:
         counter_a = 0
