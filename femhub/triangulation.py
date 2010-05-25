@@ -257,10 +257,21 @@ def edges_is_closed_curve(edges):
 
 def check_regularity(edges):
     """
-    Checks, whether the boundary is closed and whether exactly 2 edges are
+    Checks whether the boundary is closed and whether exactly 2 edges are
     sharing a node.
 
     Otherwise it raises the proper exception.
+
+    Example:
+
+    >>> check_regularity([[0,1],[1,2],[2,3],[3,0]])
+
+    >>> check_regularity([[0,1],[2,3],[3,0]]) 
+    Exception: Boundary is not closed.
+
+    The parameters in the list are edges, for example, "[0,1]" is an
+    edge.
+
     """
     for a, b in edges:
         counter_a = 0
