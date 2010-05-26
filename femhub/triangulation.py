@@ -289,10 +289,19 @@ def check_regularity(edges):
 
 def find_loops(edges):
     """
-    Extracts all loops from edges and return them as a sorted list of edges.
+    Extracts all loops from the edges and returns them as a sorted list of edges.
 
-    It also checks for a regularity of the mesh and it raises an exception if
-    something goes wrong.
+    It also checks for a regularity of the mesh and raises the proper exception
+    if something is wrong.
+
+    Example:
+
+    >>> find_loops([[0,1],[1,2],[2,3],[3,0]]) 
+    [[[0, 1], [1, 2], [2, 3], [3, 0]]] 
+
+    >>> find_loops([[0,1],[1,2],[3,0]]) 
+    Exception: Boundary is not closed.
+
     """
     check_regularity(edges)
     loops = []
