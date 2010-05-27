@@ -188,6 +188,14 @@ def polygon_area(nodes, edges):
     Calculates the (oriented) area of the polygon.
 
     It ignores any possible holes in the polygon.
+
+    Example: 
+
+    >>> polygon_area([[0,0],[0,1],[1,1],[1,0]],[[0,1],[1,2],[2,3],[3,0]]) 
+    -1.0
+    >>> polygon_area([[0,0],[0,1],[1,1],[1,0]],[[0,3],[3,2],[2,1],[1,0]]) 
+    1.0    
+
     """
     # extract the (x, y) coordinates of the boundary nodes in the order
     x = []
