@@ -151,6 +151,16 @@ def is_boundary_edge(a, b, bdy_edges):
 def triangulate_af(pts_list, bdy_edges):
     """
     Create a triangulation using the advancing front method.
+   
+    The Return is the list of elements.
+
+    Example:
+
+    >>> triangulate_af([(0, 0), (1, 0), (0.5, 1)],[(0, 1), (1, 2), (2, 0)]) 
+    [(2, 0, 1)] 
+    >>> triangulate_af([(0,0),(1,0),(1,1),(0,1),(0.5,0.5)],[(0,1),(1,2),(2,3),(3,0)]) 
+    [(3, 0, 4), (4, 0, 1), (4, 1, 2), (4, 2, 3)]    
+
     """
     # create empty list of elements
     elems = []
