@@ -69,8 +69,21 @@ def criterion(a, b, c, pts_list):
 def find_third_point(a, b, pts_list, edges):
     """
     Take a boundary edge (a,b), and in the list of points
-    find a point 'c' that lies on the left of ab and maximizes
-    the angle acb
+    find a point "c" that lies to the left of ab and maximizes
+    the angle acb.
+
+    Example:
+
+    >>> find_third_point(3,2,[[0,0],[0,1],[1,1],[1,0],[0.5,0.5]],[[0,1],[1,2],[2,3],[3,0]]) 
+    4
+    >>> find_third_point(2,1,[[0.5,0.5],[1,1],[1,0]],[[0,1],[1,2],[2,0]]) 
+    0
+    
+    The order in which the parameters are inputted DOES matter.
+    The parameters "a" and "b" refering to the points list must 
+    be inputted in that order, followed by the points list and 
+    the edges.
+
     """
     found = 0
     minimum = exp(100)   #this is dirty
