@@ -210,14 +210,19 @@ def polygon_area(nodes, edges):
     """
     Calculates the (oriented) area of the polygon.
 
-    It ignores any possible holes in the polygon.
+    The nodes that make up your system are inputted first, and then depending 
+    on how the order of your boundary edges are inputted (orientation), area will be either
+    added(positive) or subtracted(negative).  This also suggests that the
+    polygon area is oriented a certain way. 
 
     Example: 
 
-    >>> polygon_area([[0,0],[0,1],[1,1],[1,0]],[[0,1],[1,2],[2,3],[3,0]]) 
-    -1.0
+    >>> polygon_area([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],[[0,1],[1,2],[2,3],[3,0],[4,7],[7,6],[6,5],[5,4]]) 
+    -0.75  
+    >>> polygon_area([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4]]) 
+    -1.25
     >>> polygon_area([[0,0],[0,1],[1,1],[1,0]],[[0,3],[3,2],[2,1],[1,0]]) 
-    1.0    
+    1.0   
 
     """
     # extract the (x, y) coordinates of the boundary nodes in the order
