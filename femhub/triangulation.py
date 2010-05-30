@@ -152,7 +152,9 @@ def triangulate_af(pts_list, bdy_edges):
     """
     Create a triangulation using the advancing front method.
    
-    The Return is the list of elements.
+    The first parameter "pts_list" will take your list of points, followed by the second
+    parameter "bdy_edges" taking your list of boundary edges, and finally the Return
+    will be the list of elements.
 
     Example:
 
