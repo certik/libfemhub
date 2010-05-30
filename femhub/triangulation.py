@@ -212,10 +212,10 @@ def polygon_area(nodes, edges):
     """
     Calculates the (oriented) area of the polygon.
 
-    The nodes that make up your system are inputted first, and then depending 
-    on how the order of your boundary edges are inputted (orientation), area will be either
-    added(positive) or subtracted(negative).  This also suggests that the
-    polygon area is oriented a certain way. 
+    The list of nodes that make up your system are inputted first in the parameter "nodes",
+    and then depending  on how the order of your list of boundary edges are inputted (orientation)
+    in the parameter "edges", area will be either added(positive) or subtracted(negative). 
+    This also suggests that the polygon area is oriented a certain way. 
 
     Example: 
 
@@ -224,7 +224,11 @@ def polygon_area(nodes, edges):
     >>> polygon_area([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4]]) 
     -1.25
     >>> polygon_area([[0,0],[0,1],[1,1],[1,0]],[[0,3],[3,2],[2,1],[1,0]]) 
-    1.0   
+    1.0
+
+    To distinguish between the different parameters, each list in the parameters are double bracketed.  
+    For example, in the first example above "[0.75,0.25]],[[0,1]" is the end of one parameter and
+    the begining of a new one.   
 
     """
     # extract the (x, y) coordinates of the boundary nodes in the order
@@ -268,9 +272,12 @@ def edges_flip_orientation(edges):
 
 def edges_is_closed_curve(edges):
     """
-    Returns True if the edges form a closed curve, otherwise False.
+    Checks to see if the edges form a closed curve.
 
-    This is useful to check before attempting to do a triangulation.
+    The parameter "edges" takes a list of edges. The  Return is True if the
+    list of edges forms a closed curve, otherwise the Return is False.
+
+    This is a useful check before attempting to do a triangulation.
 
     Example:
 
@@ -295,9 +302,11 @@ def edges_is_closed_curve(edges):
 
 def check_regularity(edges):
     """
-    Checks whether the boundary is closed and whether exactly 2 edges are
-    sharing a node.
+    Checks whether the boundary is closed and whether exactly two edges are sharing
+    a node.
 
+    The parameter "edges" takes a list of edges, checks whether the boundary is
+    closed in the given list of edges, and whether exactly 2 edges are sharing a node.
     Otherwise it raises the proper exception.
 
     Example:
@@ -327,7 +336,8 @@ def check_regularity(edges):
 
 def find_loops(edges):
     """
-    Extracts all loops from the parameter list "edges" and returns them as a sorted edge list "loops".
+    Extracts all loops from the parameter "edges", which is a list of edges, and
+    returns them as a sorted edge list "loops".
 
     Boundary regularity (continuity) is checked as well, and the proper exception
     is raised if something is wrong.
@@ -342,6 +352,9 @@ def find_loops(edges):
 
     >>> find_loops([[0,1],[3,0],[2,3],[2,1],[4,5],[6,7],[6,5],[4,7]])  
     [[[0, 1], (1, 2), [2, 3], [3, 0]], [[4, 5], [5, 6], [6, 7], [7, 4]]] 
+
+    The parameters in the list are edges, for example, "[0,1],[3,2]" are
+    edges.
 
     """
     check_regularity(edges)
