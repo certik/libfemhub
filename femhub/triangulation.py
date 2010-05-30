@@ -325,10 +325,10 @@ def check_regularity(edges):
 
 def find_loops(edges):
     """
-    Extracts all loops from the edges and returns them as a sorted list of edges.
+    Extracts all loops from the parameter list "edges" and returns them as a sorted edge list "loops".
 
-    It also checks for a regularity (refer to check_regularity() function) of the
-    mesh and raises the proper exception if something is wrong.
+    Boundary regularity (continuity) is checked as well, and the proper exception
+    is raised if something is wrong.
 
     Example:
 
