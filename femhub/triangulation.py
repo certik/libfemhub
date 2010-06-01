@@ -68,12 +68,14 @@ def criterion(a, b, c, pts_list):
 
 def find_third_point(a, b, pts_list, edges):
     """
-    Takes a boundary edge "(a,b", and in the list of points finds a third
+    Takes a boundary edge "(a,b)", and in the list of points finds a third
     point "c", that is not equal to the parameters "a" or "b", lies to
-    the left of ab, and maximizes the angle acb.
+    the left of ab, and maximizes the angle acb. The third point also must be 
+    such that none of the edges (a, c) or (b, c) intersect with any boundary
+    edge.  
 
-    The parameters "(a,b" refer to points in the parameter list "pts_list".
-    For example, the parameter "(3" in the example below is referring to point
+    The indices "a, b" refer to points in the parameter list "pts_list".
+    For example, the first parameter "3" in the example below is referring to point
     "[1,0]" in the paramter list "pts_list".  Lastly, the edges of your system 
     are inserted in the parameter list "edges".
 
