@@ -137,19 +137,22 @@ def lies_inside(c, bdy_edges):
 
 def is_boundary_edge(a, b, bdy_edges):
     """
-    Checks whether edge (a, b) is in the list of boundary edges.
+    Checks whether edge "(a,b" is in the list of boundary edges.
+
+    The parameters "a" and "b" combine to form an edge.  The list of boundary
+    edges are then inserted in the parameter "bdy_edges".
 
     Example:
 
-    >>> is_boundary_edge([0,0],[0,1],[[[0,0],[0,1]],[0,1]]) 
+    >>> is_boundary_edge(5,4,[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4]])
     True
-    >>> is_boundary_edge([-1,0],[-1,1],[[[0,0],[0,1]],[0,1]])
+    >>> is_boundary_edge(4,6,[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4]])
     False 
 
     """
     for edge in bdy_edges:
         a0, b0 = edge
-        if a == a0 and b == b0:
+        if (a==a0 and b==b0) or (a==b0 and b==a0):
             return True
     return False
 
