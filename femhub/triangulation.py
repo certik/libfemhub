@@ -473,7 +473,18 @@ def two_edges_intersect(nodes, e1, e2):
 
 def any_edges_intersect(nodes, edges):
     """
-    Returns True if any two edges intersect.
+    Returns True if any two edges intersect, otherwise Returns False.
+
+    The nodes of the system are inputted into the paramter "nodes", while
+    the boundary edges are inputted into the paramter "edges".  For example,
+    in the example below "[0,0]" is a node and "(0,3)" is a boundary
+    edge.
+
+    Example:
+
+    >>> any_edges_intersect([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[(0,3),(0,1),(1,2),(2,3),(4,6),(4,5),(5,6)]) 
+    False
+
     """
     for i in range(len(edges)):
         for j in range(i+1, len(edges)):
