@@ -457,8 +457,8 @@ def two_edges_intersect(nodes, e1, e2):
     This function assumes the parameters "e1" and "e2" are tuples of (a_id, b_id),
     with "ids" coming from the items in the parameter list "nodes".
 
-    >>> two_edges_intersect([[0,0],[0,1],[1,1],[1,0]],(1,2),(3,2)) 
-    False
+    >>> two_edges_intersect([[0,0],[0,1],[1,1],[1,0]],(1,3),(2,0)) 
+    True
     >>> two_edges_intersect([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],(3,0),(4,5)) 
     False    
 
