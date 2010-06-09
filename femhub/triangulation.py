@@ -20,8 +20,7 @@ def is_on_the_left(c, a, b, pts_list):
    The parameters "(0,1,2," refers to the order in the list "[[-1,1],[],..."
    For example point "2" being "[0,1]".
    The parameter or point of interest "c" needs to come first, followed 
-   by points "a"and "b" in that order, and finally the list of points.
-
+   by points "a"and "b" in that order, and finally the list of points "pts_list".
 
    """
    ax, ay = pts_list[a]
@@ -52,7 +51,7 @@ def criterion(a, b, c, pts_list):
    The parameters "(0,1,2," refers to the order in the list "[[0,0],[],..."
    For example point "2" being "[-1,1]".
    The parameters need to follow the order "(a,b,c" followed by the
-   list of points.
+   list of points "pts_list".
    
    """
    ax, ay = pts_list[a]
@@ -68,8 +67,8 @@ def criterion(a, b, c, pts_list):
 
 def find_third_point(a, b, pts_list, edges):
     """
-    Takes a boundary edge "(a,b)", and in the list of points finds a third
-    point "c", that is not equal to the parameters "a" or "b", lies to
+    Takes a boundary edge "(a,b)", and in the list of points "pts_list" finds
+    a third point "c", that is not equal to the parameters "a" or "b", lies to
     the left of ab, and maximizes the angle acb. The third point also must be 
     such that none of the edges (a, c) or (b, c) intersect with any boundary
     edge.  
@@ -139,7 +138,7 @@ def lies_inside(c, bdy_edges):
 
 def is_boundary_edge(a, b, bdy_edges):
     """
-    Checks whether edge "(a,b" is in the list of boundary edges.
+    Checks whether edge "(a,b" is in the list of boundary edges "bdy_edges".
 
     The parameters "a" and "b" combine to form an edge.  The list of boundary
     edges are then inserted in the parameter "bdy_edges".
@@ -454,10 +453,13 @@ def intersect(A, B, C, D):
 def two_edges_intersect(nodes, e1, e2):
     """
     Checks whether the two given edges "e1" and "e2" intersect, from the given
-    list of nodes "nodes".
+    list of nodes "nodes". If the two edges intersect the Return is True,
+    otherwise the Return is False.
 
     This function assumes the parameters "e1" and "e2" are tuples of (a_id, b_id),
     with "ids" coming from the items in the parameter list "nodes".
+
+    Example:
 
     >>> two_edges_intersect([[0,0],[0,1],[1,1],[1,0]],(1,3),(2,0)) 
     True
@@ -473,17 +475,18 @@ def two_edges_intersect(nodes, e1, e2):
 
 def any_edges_intersect(nodes, edges):
     """
-    Returns True if any two edges intersect, otherwise Returns False.
+    Returns True if ANY two edges intersect, otherwise Returns False.
 
     The nodes of the system are inputted into the paramter "nodes", while
     the boundary edges are inputted into the paramter "edges".  For example,
-    in the example below "[0,0]" is a node and "(0,3)" is a boundary
-    edge.
+    in the example below "[0,0]" is a node and "(0,3)" is a boundary edge.
 
     Example:
 
     >>> any_edges_intersect([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[(0,3),(0,1),(1,2),(2,3),(4,6),(4,5),(5,6)]) 
     False
+    >>> any_edges_intersect([[0,0],[0,1],[1,1],[1,0]],[(0,1),(1,2),(2,0),(3,1)]) 
+    True
 
     """
     for i in range(len(edges)):
