@@ -501,7 +501,22 @@ def any_edges_intersect(nodes, edges):
 
 def edge_intersects_edges(e1, nodes, edges):
     """
-    Returns True if "e1" intersects any edge from "edges".
+    Returns True if edge "e1" intersects any edge from the list of edges "edges".
+
+    The edge of interest "e1" is inputted first, followed by the list of 
+    nodes and edges in their respective parameters "nodes" and "edges".
+
+    Example:
+
+    >>> edge_intersects_edges([2,0],[[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],[[0,3],[1,2],[1,0],[2,3],[4,5],[7,4],[6,7],[5,6]]) 
+    True
+    >>> edge_intersects_edges([5,4],[[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[[0,1],[3,2],[1,2],[3,0],[4,5],[5,6],[6,4]]) 
+    False
+
+    In the first example above "[2,0]" is the edge of interest with the numbers 
+    "2" and "0" representing items in the "nodes" list.  "[0,0]" is an item in
+    the "nodes" list, and "[0,3]" is an item in the "edges" list.
+
     """
     for i in range(len(edges)):
         e2 = edges[i]
