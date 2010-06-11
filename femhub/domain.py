@@ -683,6 +683,41 @@ class Mesh:
         self.nodes.append([x, y])
         return counter
 
+    def triangulate(self, debug=False):
+        """
+        Triangulates the domain.
+
+        Returns an instance of the Mesh() class that contains the triangular
+        mesh.
+
+        Example:
+
+        >>> d = Domain([[0, 1], [1, 1], [1, 0], [0, 0]], [(0, 3), (3, 2), (2, 1), (1, 0)])
+        >>> m = d.triangulate()
+        >>> m
+        <femhub.domain.Mesh instance at 0x2d4c0e0>
+        >>> m.nodes
+        [[0, 1], [1, 1], [1, 0], [0, 0]]
+        >>> m.elements
+        [(1, 0, 2), (2, 0, 3)]
+        >>> m.boundaries
+        [[0, 3, 1], [3, 2, 1], [2, 1, 1], [1, 0, 1]]
+
+        """
+        from triangulation import triangulate_af
+        if debug:
+            print "Triangulating..."
+            print "List of points:", self._nodes
+            print "List of boundary edges:", self._boundaries
+
+        boundaries = [(b[0],b[1]) for b in self._boundaries]
+        elems = triangulate_af(self._nodes, boundaries)
+        #boundaries = [list(b)+[1] for b in self._edges]
+        if debug:
+            print "List of elements:", elems
+
+        self._elements = elems
+
     def refine_element(self, elem, min_edge_length):
         """
         Refine a triangular element
