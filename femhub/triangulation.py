@@ -113,28 +113,48 @@ def find_third_point(a, b, pts_list, edges):
 
 # If the point 'c' belongs to a boundary edge, return False,
 # otherwise return True
-def lies_inside(c, bdy_edges):
+def lies_inside(c, poly):
    """
-   Checks to see whether a given point "c" lies on a boundary edge.
+   Checks to see whether a given point "c" lies within the domain or atop a 
+   boundary edge.
 
-   If the given point "c" lies on a boundary edge the function will 
-   return False, otherwise the function will return True.
+   If the given point "c" does not lie within the domain or is atop a boundary
+   edge the Return is False, otherwise the Return is True.  Note that this 
+   test also works for polygons with holes.
 
    Example:
 
-   >>> lies_inside([0,0.5],[[[0,0],[0,1]],[0,1]]) 
+   >>> lies_inside([0.5,0.5],[[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]])
+   False
+   >>> lies_inside([0.125,0.5],[[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]])
    True
-   >>> lies_inside([0,0],[[[0,0],[0,1]],[0,1]]) 
+   >>> lies_inside([0.0,0.5],[[0,1],[0,0],[1,0],[1,1],[0.75,0.25],[0.25,0.25],[0.25,0.75],[0.75,0.75]])
    False
 
-   The point of interest "c" comes first followed by the list of points and the 
-   boundary edge.
+   The point of interest "c" is inserted first in the parameter "c", followed by the list of points
+   that make up your domain inserted in the parameter "poly".  As can be seen in the last example, 
+   the order of your list of points does not matter.
 
    """
-   for edge in bdy_edges:
-       a,b = edge
-       if c == a or c == b: return False
-   return True
+   def lies_inside(c,poly):
+    
+    cx, cy = c
+    n = len(poly)
+    inside =False
+
+    p1x,p1y = poly[0]
+    for i in range(n+1):
+        p2x,p2y = poly[i % n]
+        if cy > min(p1y,p2y):
+            if cy <= max(p1y,p2y):
+                if cx <= max(p1x,p2x):
+                    if p1y != p2y:
+                        xinters = (cy-p1y)*(p2x-p1x)/(p2y-p1y)+p1x
+                    if p1x == p2x or cx <= xinters:
+                        inside = not inside
+        p1x,p1y = p2x,p2y
+
+    return inside
 
 def is_boundary_edge(a, b, bdy_edges):
     """
