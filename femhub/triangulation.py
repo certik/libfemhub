@@ -111,8 +111,8 @@ def find_third_point(a, b, pts_list, edges):
         raise TriangulationError("ERROR: Optimal point not found in find_third_point().")
     return pt_index
 
-# If the point 'c' belongs to a boundary edge, return False,
-# otherwise return True
+# If the point of interest "c" lies outside the domain or atop 
+# a boundary edge, Return False. Otherwise Return True.
 def lies_inside(c, poly):
    """
    Checks to see whether a given point "c" lies within the domain or atop a 
@@ -136,8 +136,6 @@ def lies_inside(c, poly):
    the order of your list of points does not matter.
 
    """
-   def lies_inside(c,poly):
-    
     cx, cy = c
     n = len(poly)
     inside =False
