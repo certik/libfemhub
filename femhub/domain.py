@@ -78,15 +78,18 @@ class Domain:
     @property
     def nodes(self):
         """
-        Returns the nodes.
+        Returns the nodes of your domain.
 
         Example:
 
-        >>> d = Domain([[0, 1], [1, 1], [1, 0], [0, 0]], [(0, 3), (3, 2), (2, 1), (1, 0)])
+        >>> import femhub
+        >>> d = femhub.Domain([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[[0,1],[3,2],[1,2],[3,0],[4,5],[5,6],[6,4]])
         >>> d.nodes
-        [[0, 1], [1, 1], [1, 0], [0, 0]]
-        >>> d.edges
-        [(0, 3), (3, 2), (2, 1), (1, 0)]
+        [[0, 0], [0, 1], [1, 1], [1, 0], [0.25, 0.25], [0.25, 0.75], [0.75,
+        0.5]] 
+        
+        A node is made up by the coordinates of a vertex.  For example, in the 
+        example above "[0,1]" is a node.    
 
         """
         return self._nodes
@@ -94,15 +97,18 @@ class Domain:
     @property
     def edges(self):
         """
-        Returns the edges.
+        Returns the edges of your domain.
 
         Example:
 
-        >>> d = Domain([[0, 1], [1, 1], [1, 0], [0, 0]], [(0, 3), (3, 2), (2, 1), (1, 0)])
-        >>> d.nodes
-        [[0, 1], [1, 1], [1, 0], [0, 0]]
+        >>> import femhub
+        >>> d = femhub.Domain([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[[0,1],[3,2],[1,2],[3,0],[4,5],[5,6],[6,4]]) 
         >>> d.edges
-        [(0, 3), (3, 2), (2, 1), (1, 0)]
+        [(0, 3), (3, 2), (2, 1), (1, 0), [4, 5], [5, 6], [6, 4]] 
+        
+        An edge is made up by two corresponding nodes from the "nodes" list. For
+        example, in the example above "(0,3)" respresents an edge made up by nodes
+        "0" and "3". 
 
         """
         return self._edges
