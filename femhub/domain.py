@@ -169,13 +169,22 @@ class Domain:
 
     def edit(self, editor="js"):
         """
-        Launches a javascript editor to edit the domain.
+        Launches a javascript editor to view or edit the domain.
 
         Example:
 
-        >>> d = Domain([[0, 1], [1, 1], [1, 0], [0, 0]], [(0, 3), (3, 2), (2, 1), (1, 0)])
-        >>> d.edit()
-        [prints an html code]
+        >>> import femhub
+        >>> d = femhub.Domain([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[[0,1],[3,2],[1,2],[3,0],[4,5],[5,6],[6,4]]) 
+        >>> d.nodes
+        [[0, 0], [0, 1], [1, 1], [1, 0], [0.25, 0.25], [0.25, 0.75], [0.75,
+        0.5]]
+        >>> d.edges
+        [(0, 3), (3, 2), (2, 1), (1, 0), [4, 5], [5, 6], [6, 4]]
+        d.edit() 
+
+        In the example above, the commands "d.nodes" and "d.edges" were inserted
+        simply to compare the javascript editor with what we have.  The command 
+        "d.edit()" launches the javascript editor.
 
         """
         self_name = "d"
@@ -187,24 +196,28 @@ class Domain:
 
     def fit_into_rectangle(self, x0, y0, w, h):
         """
-        Rescales and shifts the domain into the rectangle.
+        Resizes the domain to fit within the given rectangle.
 
-        The rectangle is specified by the bottom left point (x0, y0) and the
-        width "w" and height "h".
+        The first two parameters inserted "x0, y0" make up the bottom left origin
+        of the rectangle.  Followed by this are the paramters "w" and "h" which
+        make up the width and height of the rectangle respectively.
 
-        Angles (ratio) are preserved.
+        The angles of the original domain are preserved.
 
         Example:
 
-        >>> d = Domain([[0, 1], [1, 1], [1, 0], [0, 0]], [(0, 3), (3, 2), (2, 1), (1, 0)])
-        >>> d.nodes
-        [[0, 1], [1, 1], [1, 0], [0, 0]]
-        >>> d.fit_into_rectangle(-1, -1, 2, 2)
-        >>> d.nodes
-        [[-1.0, 1.0], [1.0, 1.0], [1.0, -1.0], [-1.0, -1.0]]
-        >>> d.fit_into_rectangle(0, 3, 5, 6)
-        >>> d.nodes
-        [[0.0, 9.0], [5.0, 9.0], [5.0, 3.0], [0.0, 3.0]]
+        >>> import femhub
+        >>> d = femhub.Domain([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[[0,1],[3,2],[1,2],[3,0],[4,5],[5,6],[6,4]]) 
+        >>> d.fit_into_rectangle(0, 0, 2, 2) 
+        >>> d.nodes 
+        [[0.0, 0.0], [0.0, 2.0], [2.0, 2.0], [2.0, 0.0], [0.5, 0.5], [0.5, 1.5], [1.5, 1.0]] 
+        >>> d.edges
+        [(0, 3), (3, 2), (2, 1), (1, 0), [4, 5], [5, 6], [6, 4]] 
+
+        In the example above, notice how our domain was resized according to the
+        parameters fed; this can be verified and seen after the "d.nodes" command.
+        The  command "d.fit_into_rectangle(0, 0, 2, 2)" accomplished the job of resizing
+        our domain.
 
         """
         if w <= 0 or h <= 0:
