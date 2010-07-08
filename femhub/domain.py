@@ -244,18 +244,28 @@ class Domain:
 
     def normalize(self):
         """
-        Transforms the domain coordinates into (0, 1)x(0, 1).
+        Transforms the domain to fit within a (0, 1)x(0, 1) rectangle.
 
-        Angles (ratio) are preserved.
+        The vertex coordinates which make up the nodes are transformed accordingly
+        and the angles of the domain are preserved.
 
         Example:
 
-        >>> d = Domain([[0, 9], [5, 9], [5, 3], [0, 3]], [(0, 3), (3, 2), (2, 1), (1, 0)])
+        >>> import femhub
+        >>> d = femhub.Domain([[0.0,0.0],[0.0,2.0],[2.0,2.0],[2.0,0.0],[0.5,0.5],[0.5,1.5],[1.5,1.0]],[[0,1],[3,2],[1,2],[3,0],[4,5],[5,6],[6,4]])
         >>> d.nodes
-        [[0, 9], [5, 9], [5, 3], [0, 3]]
-        >>> d.normalize()
+        [[0.0, 0.0], [0.0, 2.0], [2.0, 2.0], [2.0, 0.0], [0.5, 0.5], [0.5, 1.5],
+        [1.5, 1.0]]
+        >>> d.normalize() 
         >>> d.nodes
-        [[0.0, 1.0], [1.0, 1.0], [1.0, 0.0], [0.0, 0.0]]
+        [[0.0, 0.0], [0.0, 1.0], [1.0, 1.0], [1.0, 0.0], [0.25, 0.25], [0.25,
+        0.75], [0.75, 0.5]]
+        
+        In the example above, to illustrate the post "normalization", we first went ahead 
+        and displayed the original node coordinates with the command "d.nodes".  We then
+        normalized with the command "d.normalize()", and displayed the node coordinates
+        post normalization.  In the example above, as an example, "[0.75, 0.5]" represents
+        a node.
 
         """
         self.fit_into_rectangle(0, 0, 1, 1)
