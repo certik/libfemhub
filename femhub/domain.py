@@ -89,7 +89,7 @@ class Domain:
         0.5]] 
         
         A node is made up by the coordinates of a vertex.  For example, in the 
-        example above "[0,1]" is a node.    
+        example above "[0,1]" represents a node.    
 
         """
         return self._nodes
@@ -97,7 +97,8 @@ class Domain:
     @property
     def edges(self):
         """
-        Returns the edges of your domain.
+        Returns the edges of your domain in a sorted and positively oriented 
+        (counter clockwise) manner.
 
         Example:
 
@@ -273,18 +274,23 @@ class Domain:
     @property
     def boundary_closed(self):
         """
-        Returns True if the boundary is closed. Otherwise Returns False.
+        Returns True if the boundary edges form a closed curve.  Otherwise
+        an exception is raised.
 
         Example:
 
-        >>> d = Domain([[0, 0], [0, 1], [1, 1], [1, 0]],
-                [(0, 1), (1, 2), (2, 3), (3, 0)])
+        >>> import femhub
+        >>> d = femhub.Domain([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[[0,1],[3,2],[1,2],[3,0],[4,5],[5,6],[6,4]])
         >>> d.boundary_closed
         True
-        >>> d = Domain([[0, 0], [0, 1], [1, 1], [1, 0]],
-                [(0, 1), (2, 3), (3, 0)])
-        >>> d.boundary_closed
-        False
+        >>> d = femhub.Domain([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[[0,1],[3,2],[1,2],[4,5],[5,6],[6,4]])
+        Exception: Boundary is not closed. 
+
+        Notice in the example above that there was no need to execute the command
+        "d.boundary_closed" a second time.  This is because after we evaluated
+        the command "d = femhub.Domain()" the second time, the algorithm immediately
+        noticed that our boundary edges did not form a closed curve, and the proper
+        exception was raised!
 
         """
         from triangulation import edges_is_closed_curve
