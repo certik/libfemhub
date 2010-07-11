@@ -300,16 +300,27 @@ class Domain:
         """
         Calculates the (oriented) area of the domain.
 
-        It ignores any possible holes in the domain.
+        Note that this evaluation also works with domains with holes.  The area of
+        the hole(s) will simply be subtracted from the total area.
 
         Example:
 
-        >>> d = Domain([[0, 9], [5, 9], [5, 3], [0, 3]], [(0, 3), (3, 2), (2, 1), (1, 0)])
-        >>> d.boundary_area()
-        30.0
-        >>> d.normalize()
-        >>> d.boundary_area()
+        >>> import femhub
+        >>> d = femhub.Domain([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],
+        [6,7],[7,4]]) 
+        >>> d.edges
+        [(0, 3), (3, 2), (2, 1), (1, 0), [4, 5], [5, 6], [6, 7], [7, 4]] 
+        >>> d.boundary_area() 
+        0.75
+        >>> d = femhub.Domain([[0,0],[0,1],[1,1],[1,0]],[[0,3],[3,2],[2,1],[1,0]])
+        >>> d.boundary_area() 
         1.0
+
+        Notice from the command "d.edges" that the outside domain edges are first sorted
+        and positively oriented in a counter clockwise fashion before the calculation;
+        The hole edges in the domain are negatively (clockwise) oriented so as to be
+        subtracted from the total area.  This can further be observed when we evaluate 
+        for the second time "d.boundary_area()" for the domain without the hole.
 
         """
         from triangulation import polygon_area
