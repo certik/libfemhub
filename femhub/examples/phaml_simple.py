@@ -12,7 +12,7 @@ def run():
     y = array([0, 0.5, 1])
     #sol = array([0, 0.5, 1])
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    domain_file = os.path.join(current_dir, "domain")
+    domain_file = os.path.join(current_dir, "data", "domain")
     u = simple.python_gets.run(x, y, triangle_files=domain_file)
     print u
     print type(u)
