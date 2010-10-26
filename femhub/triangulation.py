@@ -7,19 +7,19 @@ class TriangulationError(Exception):
 def is_on_the_left(c, a, b, pts_list):
    """
    Checks whether a given point "c" lies to the left of the edge (a,b).
- 
+
    The order in which the parameters are inputted DOES matter.
-   
+
    Example:
 
-   >>> is_on_the_left(0,1,2,[[-1,1],[0,0],[0,1]]) 
+   >>> is_on_the_left(0,1,2,[[-1,1],[0,0],[0,1]])
    True
    >>> is_on_the_left(0,2,1,[[-1,1],[0,0],[0,1]])
    False
 
    The parameters "(0,1,2," refers to the order in the list "[[-1,1],[],..."
    For example point "2" being "[0,1]".
-   The parameter or point of interest "c" needs to come first, followed 
+   The parameter or point of interest "c" needs to come first, followed
    by points "a"and "b" in that order, and finally the list of points "pts_list".
 
    """
@@ -35,24 +35,24 @@ def is_on_the_left(c, a, b, pts_list):
 # Angle criterion (to be minimized)
 def criterion(a, b, c, pts_list):
    """
-   Returns the cosine of the angle acb. 
+   Returns the cosine of the angle acb.
 
-   Used to find point "c" to the left of the edge (a,b) that maximizes 
-   the angle acb. 
+   Used to find point "c" to the left of the edge (a,b) that maximizes
+   the angle acb.
 
    Example:
 
    >>> criterion(0,1,2,[[0,0],[0,1],[-1,1]])
    0.707106
    >>> criterion(0,1,2,[[0,0],[0,2],[-1,1]])
-   0.0 
+   0.0
 
    The order in which the parameters are inputted DOES matter.
    The parameters "(0,1,2," refers to the order in the list "[[0,0],[],..."
    For example point "2" being "[-1,1]".
    The parameters need to follow the order "(a,b,c" followed by the
    list of points "pts_list".
-   
+
    """
    ax, ay = pts_list[a]
    bx, by = pts_list[b]
@@ -69,22 +69,22 @@ def find_third_point(a, b, pts_list, edges):
     """
     Takes a boundary edge "(a,b)", and in the list of points "pts_list" finds
     a third point "c", that is not equal to the parameters "a" or "b", lies to
-    the left of ab, and maximizes the angle acb. The third point also must be 
+    the left of ab, and maximizes the angle acb. The third point also must be
     such that none of the edges (a, c) or (b, c) intersect with any boundary
-    edge.  
+    edge.
 
     The indices "a, b" refer to points in the parameter list "pts_list".
     For example, the first parameter "3" in the example below is referring to point
-    "[1,0]" in the paramter list "pts_list".  Lastly, the edges of your system 
+    "[1,0]" in the paramter list "pts_list".  Lastly, the edges of your system
     are inserted in the parameter list "edges".
 
     Example:
 
-    >>> find_third_point(3,2,[[0,0],[0,1],[1,1],[1,0],[0.5,0.5]],[[0,1],[1,2],[2,3],[3,0]]) 
+    >>> find_third_point(3,2,[[0,0],[0,1],[1,1],[1,0],[0.5,0.5]],[[0,1],[1,2],[2,3],[3,0]])
     4
-    >>> find_third_point(2,1,[[0.5,0.5],[1,1],[1,0]],[[0,1],[1,2],[2,0]]) 
+    >>> find_third_point(2,1,[[0.5,0.5],[1,1],[1,0]],[[0,1],[1,2],[2,0]])
     0
-    
+
     Keep in mind that the order in which the parameters are inputted DOES matter.
     The parameters "a" and "b" refering to points in the list "pts_list"
     must  be inputted in that order, followed by the points list and  the edges
@@ -111,15 +111,15 @@ def find_third_point(a, b, pts_list, edges):
         raise TriangulationError("ERROR: Optimal point not found in find_third_point().")
     return pt_index
 
-# If the point of interest "c" lies outside the domain or atop 
+# If the point of interest "c" lies outside the domain or atop
 # a boundary edge, Return False. Otherwise Return True.
 def lies_inside(c, poly):
    """
-   Checks to see whether a given point "c" lies within the domain or atop a 
+   Checks to see whether a given point "c" lies within the domain or atop a
    boundary edge.
 
    If the given point "c" does not lie within the domain or is atop a boundary
-   edge the Return is False, otherwise the Return is True.  Note that this 
+   edge the Return is False, otherwise the Return is True.  Note that this
    test also works for polygons with holes.
 
    Example:
@@ -132,7 +132,7 @@ def lies_inside(c, poly):
    False
 
    The point of interest "c" is inserted first in the parameter "c", followed by the list of points
-   that make up your domain inserted in the parameter "poly".  As can be seen in the last example, 
+   that make up your domain inserted in the parameter "poly".  As can be seen in the last example,
    the order of your list of points does not matter.
 
    """
@@ -166,7 +166,7 @@ def is_boundary_edge(a, b, bdy_edges):
     >>> is_boundary_edge(5,4,[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4]])
     True
     >>> is_boundary_edge(4,6,[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4]])
-    False 
+    False
 
     """
     for edge in bdy_edges:
@@ -178,17 +178,17 @@ def is_boundary_edge(a, b, bdy_edges):
 def triangulate_af(pts_list, bdy_edges):
     """
     Create a triangulation using the advancing front method.
-   
+
     The first parameter "pts_list" will take your list of points, followed by the second
     parameter "bdy_edges" taking your list of boundary edges, and finally the Return
     will be the list of elements.
 
     Example:
 
-    >>> triangulate_af([(0, 0), (1, 0), (0.5, 1)],[(0, 1), (1, 2), (2, 0)]) 
-    [(2, 0, 1)] 
-    >>> triangulate_af([(0,0),(1,0),(1,1),(0,1),(0.5,0.5)],[(0,1),(1,2),(2,3),(3,0)]) 
-    [(3, 0, 4), (4, 0, 1), (4, 1, 2), (4, 2, 3)]    
+    >>> triangulate_af([(0, 0), (1, 0), (0.5, 1)],[(0, 1), (1, 2), (2, 0)])
+    [(2, 0, 1)]
+    >>> triangulate_af([(0,0),(1,0),(1,1),(0,1),(0.5,0.5)],[(0,1),(1,2),(2,3),(3,0)])
+    [(3, 0, 4), (4, 0, 1), (4, 1, 2), (4, 2, 3)]
 
     """
     # create empty list of elements
@@ -241,21 +241,21 @@ def polygon_area(nodes, edges):
 
     The list of nodes that make up your system are inputted first in the parameter "nodes",
     and then depending  on how the order of your list of boundary edges are inputted (orientation)
-    in the parameter "edges", area will be either added(positive) or subtracted(negative). 
-    This also suggests that the polygon area is oriented a certain way. 
+    in the parameter "edges", area will be either added(positive) or subtracted(negative).
+    This also suggests that the polygon area is oriented a certain way.
 
-    Example: 
+    Example:
 
-    >>> polygon_area([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],[[0,1],[1,2],[2,3],[3,0],[4,7],[7,6],[6,5],[5,4]]) 
-    -0.75  
-    >>> polygon_area([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4]]) 
+    >>> polygon_area([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],[[0,1],[1,2],[2,3],[3,0],[4,7],[7,6],[6,5],[5,4]])
+    -0.75
+    >>> polygon_area([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4]])
     -1.25
-    >>> polygon_area([[0,0],[0,1],[1,1],[1,0]],[[0,3],[3,2],[2,1],[1,0]]) 
+    >>> polygon_area([[0,0],[0,1],[1,1],[1,0]],[[0,3],[3,2],[2,1],[1,0]])
     1.0
 
-    To distinguish between the different parameters, each list in the parameters are double bracketed.  
+    To distinguish between the different parameters, each list in the parameters are double bracketed.
     For example, in the first example above "[0.75,0.25]],[[0,1]" is the end of one parameter and
-    the begining of a new one.   
+    the begining of a new one.
 
     """
     # extract the (x, y) coordinates of the boundary nodes in the order
@@ -340,7 +340,7 @@ def check_regularity(edges):
 
     >>> check_regularity([[0,1],[1,2],[2,3],[3,0]])
 
-    >>> check_regularity([[0,1],[2,3],[3,0]]) 
+    >>> check_regularity([[0,1],[2,3],[3,0]])
     Exception: Boundary is not closed.
 
     The parameters in the list are edges, for example, "[0,1]" is an
@@ -372,13 +372,13 @@ def find_loops(edges):
     Example:
 
     >>> find_loops([[0,1],[3,2],[1,2],[3,0],[4,5],[6,4],[6,5]])
-    [[[0, 1], [1, 2], (2, 3), [3, 0]], [[4, 5], (5, 6), [6, 4]]] 
+    [[[0, 1], [1, 2], (2, 3), [3, 0]], [[4, 5], (5, 6), [6, 4]]]
 
     >>> find_loops([[0,1],[3,0],[2,3],[2,1],[4,5],[5,6],[7,4]])
     Exception: Boundary is not closed.
 
-    >>> find_loops([[0,1],[3,0],[2,3],[2,1],[4,5],[6,7],[6,5],[4,7]])  
-    [[[0, 1], (1, 2), [2, 3], [3, 0]], [[4, 5], [5, 6], [6, 7], [7, 4]]] 
+    >>> find_loops([[0,1],[3,0],[2,3],[2,1],[4,5],[6,7],[6,5],[4,7]])
+    [[[0, 1], (1, 2), [2, 3], [3, 0]], [[4, 5], [5, 6], [6, 7], [7, 4]]]
 
     The parameters in the list are edges, for example, "[0,1],[3,2]" are
     edges.
@@ -446,7 +446,7 @@ def orient_loops(nodes, loops):
 
 def ccw(A, B, C):
     """
-    Checks whether a triangle is positively (counter clock wise) oriented.  
+    Checks whether a triangle is positively (counter clock wise) oriented.
 
     Here (A[0], A[1]), (B[0], B[1]), (C[0], C[1]) are vertex coordinates.
 
@@ -479,10 +479,10 @@ def two_edges_intersect(nodes, e1, e2):
 
     Example:
 
-    >>> two_edges_intersect([[0,0],[0,1],[1,1],[1,0]],(1,3),(2,0)) 
+    >>> two_edges_intersect([[0,0],[0,1],[1,1],[1,0]],(1,3),(2,0))
     True
-    >>> two_edges_intersect([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],(3,0),(4,5)) 
-    False    
+    >>> two_edges_intersect([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],(3,0),(4,5))
+    False
 
     """
     A = nodes[e1[0]]
@@ -501,9 +501,9 @@ def any_edges_intersect(nodes, edges):
 
     Example:
 
-    >>> any_edges_intersect([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[(0,3),(0,1),(1,2),(2,3),(4,6),(4,5),(5,6)]) 
+    >>> any_edges_intersect([[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[(0,3),(0,1),(1,2),(2,3),(4,6),(4,5),(5,6)])
     False
-    >>> any_edges_intersect([[0,0],[0,1],[1,1],[1,0]],[(0,1),(1,2),(2,0),(3,1)]) 
+    >>> any_edges_intersect([[0,0],[0,1],[1,1],[1,0]],[(0,1),(1,2),(2,0),(3,1)])
     True
 
     """
@@ -521,17 +521,17 @@ def edge_intersects_edges(e1, nodes, edges):
     """
     Returns True if edge "e1" intersects any edge from the list of edges "edges".
 
-    The edge of interest "e1" is inputted first, followed by the list of 
+    The edge of interest "e1" is inputted first, followed by the list of
     nodes and edges in their respective parameters "nodes" and "edges".
 
     Example:
 
-    >>> edge_intersects_edges([2,0],[[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],[[0,3],[1,2],[1,0],[2,3],[4,5],[7,4],[6,7],[5,6]]) 
+    >>> edge_intersects_edges([2,0],[[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]],[[0,3],[1,2],[1,0],[2,3],[4,5],[7,4],[6,7],[5,6]])
     True
-    >>> edge_intersects_edges([5,4],[[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[[0,1],[3,2],[1,2],[3,0],[4,5],[5,6],[6,4]]) 
+    >>> edge_intersects_edges([5,4],[[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.5]],[[0,1],[3,2],[1,2],[3,0],[4,5],[5,6],[6,4]])
     False
 
-    In the first example above "[2,0]" is the edge of interest with the numbers 
+    In the first example above "[2,0]" is the edge of interest with the numbers
     "2" and "0" representing items in the "nodes" list.  "[0,0]" is an item in
     the "nodes" list, and "[0,3]" is an item in the "edges" list.
 
