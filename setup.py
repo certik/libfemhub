@@ -9,4 +9,7 @@ setup(
         'femhub',
         'femhub.examples',
         ],
+    package_data = {
+        'femhub.examples': ['data/domain*'],
+        }
 )
