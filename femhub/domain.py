@@ -66,8 +66,12 @@ class Domain:
         self._nodes = nodes
         self._edges = edges
 
-        import sagenb.notebook.interact
-        self._cell_id_init = sagenb.notebook.interact.SAGE_CELL_ID
+        try:
+            #only used in old online lab
+            import sagenb.notebook.interact
+            self._cell_id_init = sagenb.notebook.interact.SAGE_CELL_ID
+        except:
+            pass
 
     def __str__(self):
         return """Domain:
@@ -126,8 +130,13 @@ class Domain:
         '<html>...</html>'
 
         """
-        import sagenb.notebook.interact
-        self._cell_id_edit = sagenb.notebook.interact.SAGE_CELL_ID
+        try:
+            #This is only for oldonline lab
+            import sagenb.notebook.interact
+            self._cell_id_edit = sagenb.notebook.interact.SAGE_CELL_ID
+        except:
+            pass
+
         if editor != "js":
             raise Exception("Editor is not implemented.")
 

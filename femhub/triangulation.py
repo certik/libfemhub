@@ -114,28 +114,28 @@ def find_third_point(a, b, pts_list, edges):
 # If the point of interest "c" lies outside the domain or atop
 # a boundary edge, Return False. Otherwise Return True.
 def lies_inside(c, poly):
-   """
-   Checks to see whether a given point "c" lies within the domain or atop a
-   boundary edge.
+    """
+    Checks to see whether a given point "c" lies within the domain or atop a
+    boundary edge.
 
-   If the given point "c" does not lie within the domain or is atop a boundary
-   edge the Return is False, otherwise the Return is True.  Note that this
-   test also works for polygons with holes.
+    If the given point "c" does not lie within the domain or is atop a boundary
+    edge the Return is False, otherwise the Return is True.  Note that this
+    test also works for polygons with holes.
 
-   Example:
+    Example:
 
-   >>> lies_inside([0.5,0.5],[[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]])
-   False
-   >>> lies_inside([0.125,0.5],[[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]])
-   True
-   >>> lies_inside([0.0,0.5],[[0,1],[0,0],[1,0],[1,1],[0.75,0.25],[0.25,0.25],[0.25,0.75],[0.75,0.75]])
-   False
+    >>> lies_inside([0.5,0.5],[[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]])
+    False
+    >>> lies_inside([0.125,0.5],[[0,0],[0,1],[1,1],[1,0],[0.25,0.25],[0.25,0.75],[0.75,0.75],[0.75,0.25]])
+    True
+    >>> lies_inside([0.0,0.5],[[0,1],[0,0],[1,0],[1,1],[0.75,0.25],[0.25,0.25],[0.25,0.75],[0.75,0.75]])
+    False
 
-   The point of interest "c" is inserted first in the parameter "c", followed by the list of points
-   that make up your domain inserted in the parameter "poly".  As can be seen in the last example,
-   the order of your list of points does not matter.
+    The point of interest "c" is inserted first in the parameter "c", followed by the list of points
+    that make up your domain inserted in the parameter "poly".  As can be seen in the last example,
+    the order of your list of points does not matter.
 
-   """
+    """
     cx, cy = c
     n = len(poly)
     inside =False
@@ -543,3 +543,62 @@ def edge_intersects_edges(e1, nodes, edges):
         if two_edges_intersect(nodes, e1, e2):
             return True
     return False
+
+def print_triangulated_mesh_xml(nodes, boundaries):
+    """
+    nodes = "0 0,0 1,1 1,1 0,0.5 0.5"
+    boundaries = "0 1 1 0,1 2 1 0,2 3 1 0,3 0 1 0"
+    print_triangulated_mesh_xml(nodes, boundaries)
+    """
+
+    node_list = []
+    edge_list = []
+
+    for n in nodes.split(','):
+        if(len(n)!=0):
+            xy = n.split(' ')
+            node_list.append((float(xy[0]),float(xy[1])))
+
+    for b in boundaries.split(','):
+        if(len(b)!=0):
+            xyz = b.split(' ')
+            edge_list.append([int(xyz[0]),int(xyz[1]),int(xyz[2]),int(xyz[3])])
+
+    from femhub import Domain
+
+    d = Domain(node_list, [(edge[0], edge[1]) for edge in edge_list])
+    m = d.triangulate()
+    m._boundaries = edge_list
+
+    xml = "<?xml version='1.0' encoding='UTF-8'?>"
+    xml += "<mesheditor>"
+
+    xml += "<vertices>"
+    for i,n in enumerate(m._nodes):
+        xml += "<vertex id='" + str(i) + "'>"
+        xml += "<x>" + str(n[0]) + "</x><y>" + str(n[1]) + "</y>"
+        xml += "</vertex>"
+    xml += "</vertices>"
+
+    xml += "<elements>"
+    for i,e in enumerate(m._elements):
+        xml += "<element id='" + str(i) + "'>"
+        for j, v in enumerate(e):
+            xml += "<v" + str(j + 1) + ">" + str(v) + "</v" + str(j + 1) + ">"
+        xml += "<material>0</material>"
+        xml += "</element>"
+    xml += "</elements>"
+
+    xml += "<boundaries>"
+    for i,b in enumerate(m._boundaries):
+        xml += "<boundary id='" + str(i) + "'>"
+        for j,v in enumerate(b):
+            if j<2:
+                xml += "<v" + str(j + 1) + ">" + str(v) + "</v" + str(j + 1) + ">"
+        xml += "<marker>" + str(b[2]) + "</marker>"
+        xml += "<angle>" + str(b[3]) + "</angle>"
+        xml += "</boundary>"
+    xml += "</boundaries>"
+
+    xml += "</mesheditor>"
+    print xml
