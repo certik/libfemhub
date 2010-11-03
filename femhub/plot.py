@@ -144,7 +144,7 @@ def plot_mesh_mpl(polygons=None, polynomial_orders=None, edges_only=False):
     sp.autoscale_view()
     return sp.figure
 
-def plot_sln_mayavi(x, y, sln_values, colorbar=False)
+def plot_sln_mayavi(x, y, mesh, sln_values, colorbar=False):
     """
     Plot a solution using mayavi.
 
@@ -160,15 +160,15 @@ def plot_sln_mayavi(x, y, sln_values, colorbar=False)
     mlab.options.offscreen = True
     mlab.clf()
     #mlab.options.show_scalar_bar = False
-    mlab.triangular_mesh(x, y, z, mesh.elems, scalars=sln_values)
+    z = [0] * len(x)
+    mlab.triangular_mesh(x, y, z, mesh, scalars=sln_values)
     engine = mlab.get_engine()
     image = engine.current_scene
     image.scene.background = (1.0, 1.0, 1.0)
     image.scene.foreground = (0.0, 0.0, 0.0)
     if colorbar:
         mlab.colorbar(orientation="vertical")
-    if view:
-        mlab.view(view[0], view[1])
+    mlab.view(0, 0)
     return mlab
 
 def plotsln(mesh, z=None, sln=None, colorbar=False, view=(0,0),

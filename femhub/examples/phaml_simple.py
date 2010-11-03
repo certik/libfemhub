@@ -6,7 +6,7 @@ import os
 from numpy import array
 
 from phaml import Phaml
-from femhub.plot import plot_mesh_mpl
+from femhub.plot import plot_mesh_mpl, plot_sln_mayavi
 
 def convert_mesh(x, y, elems, elems_orders):
     """
@@ -20,6 +20,7 @@ def convert_mesh(x, y, elems, elems_orders):
         orders[n] = order
     return polygons, orders
 
+# This function is not used anywhere yet
 def get_solution_points(polygons, orders):
     """
     Returns a list of x and y points for the values of the solution.
@@ -40,17 +41,23 @@ def run():
     p.solve()
     mesh_data = p.get_mesh()
     polygons, orders = convert_mesh(*mesh_data)
-    x, y = get_solution_points(polygons, orders)
+
+    import matplotlib
+    matplotlib.use("Agg")
+    f = plot_mesh_mpl(polygons, orders)
+    f.savefig("mesh.png")
+
+    x, y, mesh, _ = mesh_data
     # --------------
     # Call phaml here:
     from numpy import sin, cos
     values = sin(x)*cos(y)
     # up to here
     # --------------
-    import matplotlib
-    matplotlib.use("Agg")
-    f = plot_mesh_mpl(polygons, orders)
-    f.savefig("mesh.png")
+
+    mesh = [elem-1 for elem in mesh]
+    f = plot_sln_mayavi(x, y, mesh, values)
+    f.savefig("sln.png")
 
 
 run()
