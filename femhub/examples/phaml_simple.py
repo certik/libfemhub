@@ -5,24 +5,25 @@ import os
 
 from numpy import array
 
-from phaml import simple
+from phaml import Phaml
+from femhub.plot import plot_mesh_mpl
 
 def run():
-    x = array([0, 0.6, 1])
-    y = array([0, 0.5, 1])
-    #sol = array([0, 0.5, 1])
     current_dir = os.path.dirname(os.path.abspath(__file__))
     domain_file = os.path.join(current_dir, "data", "domain")
-    u = simple.python_gets.run(x, y, triangle_files=domain_file)
-    print u
-    print type(u)
-    print u.dtype
-    print simple.python_gets.xvert[:100]
-    print simple.python_gets.yvert
-    print simple.python_gets.element_vertices
-    print simple.python_gets.element_order
-    print simple.python_gets.nvert
-    print simple.python_gets.nelem
+    p = Phaml(domain_file)
+    p.solve()
+    x, y, _elems, _orders = p.get_mesh()
+    polygons = {}
+    for n, elem in enumerate(_elems):
+        polygons[n] = array([ [x[i-1], y[i-1]] for i in elem ])
+    print polygons
+    orders = {}
+    for n, order in enumerate(_orders):
+        orders[n] = order
+    import matplotlib
+    matplotlib.use("Agg")
+    f = plot_mesh_mpl(polygons, orders)
+    f.savefig("a.png")
 
-    print len(simple.python_gets.element_vertices)
-    print len(simple.python_gets.element_order)
+run()
