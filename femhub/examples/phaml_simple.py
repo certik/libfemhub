@@ -48,16 +48,8 @@ def run():
     f.savefig("mesh.png")
 
     x, y, mesh, _ = mesh_data
-    # --------------
-    # Call phaml here:
-    from numpy import sin, cos
-    values = sin(x)*cos(y)
-    # up to here
-    # --------------
+    values = p.get_solution_values(x, y)
 
     mesh = [elem-1 for elem in mesh]
     f = plot_sln_mayavi(x, y, mesh, values)
     f.savefig("sln.png")
-
-
-run()
