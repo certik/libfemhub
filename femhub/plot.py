@@ -144,10 +144,37 @@ def plot_mesh_mpl(polygons=None, polynomial_orders=None, edges_only=False):
     sp.autoscale_view()
     return sp.figure
 
+def plot_sln_mayavi(x, y, sln_values, colorbar=False)
+    """
+    Plot a solution using mayavi.
+
+    Example:
+
+    >>> from numpy import array
+    >>> from femhub.plot import plot_sln_mayavi
+    >>> f = plot_sln_mayavi([0, 1, 1], [0, 0, 1], [1, 2, 3])
+    >>> f.savefig("a.png")
+
+    """
+    from enthought.mayavi import mlab
+    mlab.options.offscreen = True
+    mlab.clf()
+    #mlab.options.show_scalar_bar = False
+    mlab.triangular_mesh(x, y, z, mesh.elems, scalars=sln_values)
+    engine = mlab.get_engine()
+    image = engine.current_scene
+    image.scene.background = (1.0, 1.0, 1.0)
+    image.scene.foreground = (0.0, 0.0, 0.0)
+    if colorbar:
+        mlab.colorbar(orientation="vertical")
+    if view:
+        mlab.view(view[0], view[1])
+    return mlab
+
 def plotsln(mesh, z=None, sln=None, colorbar=False, view=(0,0),
         filename="a.png"):
     """
-    Plot solution for mesh editor on the online lab
+    Plot a solution for the mesh editor in the online lab.
     """
     x = [n[0] for n in mesh.nodes]
     y = [n[1] for n in mesh.nodes]
@@ -170,5 +197,3 @@ def plotsln(mesh, z=None, sln=None, colorbar=False, view=(0,0),
     if view:
         mlab.view(view[0], view[1])
     mlab.savefig(filename)
-
-
